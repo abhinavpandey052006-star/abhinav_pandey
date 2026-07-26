@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab11.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="experiment-11-orchestration-using-docker-compose-docker-swarm">Experiment 11 — Orchestration using Docker Compose &amp; Docker Swarm</h1>
+<h2 id="objective">Objective</h2>
+<p>To understand container orchestration and deploy a multi-container application using Docker Swarm.<br />
+The experiment demonstrates scaling, load balancing, and self-healing capabilities compared with Docker Compose.</p>
+<hr />
+<h1 id="theory">Theory</h1>
+<h2 id="what-is-container-orchestration">What is Container Orchestration?</h2>
+<p>Container orchestration is the <strong>automatic management of containers</strong>.</p>
+<p>It handles tasks such as:</p>
+<ul>
+<li>scaling containers</li>
+<li>restarting failed containers</li>
+<li>distributing traffic across containers</li>
+<li>running services across multiple machines</li>
+</ul>
+<p>An analogy is a <strong>restaurant manager</strong> who ensures enough staff are working, replaces unavailable staff, and distributes customers efficiently. </p>
+<hr />
+<h1 id="progression-of-container-management-tools">Progression of Container Management Tools</h1>
+<pre><code>docker run → Docker Compose → Docker Swarm → Kubernetes
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker run</td>
+<td>run a single container</td>
+</tr>
+<tr>
+<td>Docker Compose</td>
+<td>run multiple containers together</td>
+</tr>
+<tr>
+<td>Docker Swarm</td>
+<td>orchestrate containers across nodes</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>advanced orchestration platform</td>
+</tr>
+</tbody>
+</table>
+<p>This lab focuses on <strong>moving from Compose to Swarm orchestration</strong>. </p>
+<hr />
+<h1 id="prerequisites">Prerequisites</h1>
+<ul>
+<li>Docker installed</li>
+<li>Docker Swarm enabled</li>
+<li>WordPress + MySQL Compose file from Experiment 6</li>
+</ul>
+<hr />
+<h1 id="docker-compose-file">Docker Compose File</h1>
+<pre><code class="language-yaml">version: '3.9'
+
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: wordpress_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress_app
+    depends_on:
+      - db
+    ports:
+      - &quot;8080:80&quot;
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+
+volumes:
+  db_data:
+  wp_data:
+</code></pre>
+<hr />
+<h1 id="task-1-stop-existing-containers">Task 1 — Stop Existing Containers</h1>
+<p>First ensure no containers are running.</p>
+<pre><code class="language-bash">docker compose down -v
+docker ps
+</code></pre>
+<p>Expected result: no containers running.</p>
+<hr />
+<h1 id="task-2-initialize-docker-swarm">Task 2 — Initialize Docker Swarm</h1>
+<p>Enable Swarm mode:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.1.png" />  </p>
+<p>This command:</p>
+<ul>
+<li>enables swarm mode</li>
+<li>makes the current machine the <strong>manager node</strong></li>
+<li>generates a join token for worker nodes</li>
+</ul>
+<p>Verify swarm status:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.2.png" />  </p>
+<p>Expected output shows the node status as <strong>Ready / Leader</strong>. :contentReference[oaicite:4]{index=4}</p>
+<hr />
+<h1 id="task-3-deploy-application-as-a-stack">Task 3 — Deploy Application as a Stack</h1>
+<p>Deploy the compose file as a <strong>stack</strong>.</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.3.png" />  </p>
+<p>Explanation:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>docker stack deploy</td>
+<td>deploy application in swarm</td>
+</tr>
+<tr>
+<td>-c docker-compose.yml</td>
+<td>specify compose file</td>
+</tr>
+<tr>
+<td>wpstack</td>
+<td>stack name</td>
+</tr>
+</tbody>
+</table>
+<p>Behind the scenes Swarm:</p>
+<ol>
+<li>reads the compose file  </li>
+<li>creates services  </li>
+<li>manages containers automatically.</li>
+</ol>
+<hr />
+<h1 id="task-4-verify-deployment">Task 4 — Verify Deployment</h1>
+<p>List services:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.4.png" />  </p>
+<p>Example output:</p>
+<pre><code>ID NAME MODE REPLICAS IMAGE
+xxxx wpstack_db replicated 1/1 mysql:5.7
+xxxx wpstack_wordpress replicated 1/1 wordpress:latest
+</code></pre>
+<p>Inspect running tasks:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.5.png" />  </p>
+<p>Check containers:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.6.png" />  </p>
+<p>Containers now have names like:</p>
+<pre><code>wpstack_wordpress.1.xxxx
+wpstack_db.1.xxxx
+</code></pre>
+<p>Swarm now <strong>manages containers automatically</strong>. </p>
+<hr />
+<h1 id="task-5-access-the-application">Task 5 — Access the Application</h1>
+<p>Open browser:</p>
+<pre><code>http://localhost:8080
+</code></pre>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.14.png" />  </p>
+<p>You should see the <strong>WordPress setup page</strong>.</p>
+<p>Even though Swarm manages the containers, the application behaves the same.</p>
+<hr />
+<h1 id="task-6-scale-the-application">Task 6 — Scale the Application</h1>
+<p>Scale WordPress service from <strong>1 to 3 replicas</strong>.</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.7.png" />  </p>
+<p>Verify scaling:  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.8.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.9.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.10.png" />  </p>
+<p>Now <strong>three WordPress containers run simultaneously</strong>. </p>
+<hr />
+<h1 id="load-balancing">Load Balancing</h1>
+<p>Even with multiple containers, users still access:</p>
+<pre><code>http://localhost:8080
+</code></pre>
+<p>Swarm creates an <strong>internal load balancer</strong> that distributes traffic across all containers automatically.</p>
+<hr />
+<h1 id="task-7-test-self-healing">Task 7 — Test Self-Healing</h1>
+<p>Swarm automatically replaces failed containers.</p>
+<p>Find a WordPress container:</p>
+<pre><code class="language-bash">docker ps | grep wordpress
+</code></pre>
+<p>Kill it:</p>
+<pre><code class="language-bash">docker kill &lt;container-id&gt;
+</code></pre>
+<p>Check service tasks:<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.11.png" />  </p>
+<p>Swarm detects the failure and <strong>creates a replacement container automatically</strong>. </p>
+<hr />
+<h1 id="task-8-remove-the-stack">Task 8 — Remove the Stack</h1>
+<p>Clean up all services:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.12.png" />  </p>
+<p>Verify removal:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/11.13.png" />  </p>
+<p>Containers should be removed.</p>
+<hr />
+<h1 id="compose-vs-swarm">Compose vs Swarm</h1>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Docker Compose</th>
+<th>Docker Swarm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope</td>
+<td>single host</td>
+<td>multi-node cluster</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>basic</td>
+<td>built-in service scaling</td>
+</tr>
+<tr>
+<td>Load balancing</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Self-healing</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Rolling updates</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Service discovery</td>
+<td>container names</td>
+<td>DNS + VIP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="compose-is-best-for-development-while-swarm-supports-production-orchestration">Compose is best for <strong>development</strong>, while Swarm supports <strong>production orchestration</strong>.</h2>
+<h1 id="observations">Observations</h1>
+<ol>
+<li>The same Compose YAML file can be reused in Swarm.</li>
+<li>In Swarm, you manage <strong>services instead of containers</strong>.</li>
+<li>Swarm resolves port conflicts using an internal load balancer.</li>
+</ol>
+<hr />
+<h1 id="learning-outcome-questions">Learning Outcome Questions</h1>
+<ol>
+<li>Why is Docker Compose not sufficient for production environments?</li>
+<li>What does <code>docker stack deploy</code> do differently from <code>docker compose up</code>?</li>
+<li>How does Swarm provide self-healing?</li>
+<li>What happens if a container managed by Swarm is killed?</li>
+<li>Can the same Compose file be used for development and production?</li>
+</ol>
+<hr />
+<h1 id="conclusion">Conclusion</h1>
+<p>This experiment demonstrated container orchestration using Docker Swarm.<br />
+A multi-container WordPress application was deployed using a Compose file, scaled to multiple replicas, and tested for self-healing capabilities. Swarm provides built-in load balancing, automatic recovery, and cluster management, making it more suitable for production environment</p>
+</body>
+</html>

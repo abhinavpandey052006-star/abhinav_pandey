@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab4.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="experiment-4-docker-essentials">Experiment 4: Docker Essentials</h1>
+<p><strong>Topics Covered:</strong><br />
+- Dockerfile<br />
+- .dockerignore<br />
+- Tagging<br />
+- Publishing</p>
+<hr />
+<h2 id="part-1-containerizing-applications-with-dockerfile">Part 1: Containerizing Applications with Dockerfile</h2>
+<h3 id="step-1-create-a-simple-application">Step 1: Create a Simple Application</h3>
+<p><strong>Python Flask App:</strong></p>
+<pre><code class="language-bash">mkdir my-flask-app
+cd my-flask-app
+</code></pre>
+<p><strong><code>app.py</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.1.png" /></p>
+<p><strong><code>requirements.txt</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.2.png" /></p>
+<h3 id="step-2-create-dockerfile">Step 2: Create Dockerfile</h3>
+<p><strong><code>Dockerfile</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.3.png" /></p>
+<hr />
+<h2 id="part-2-using-dockerignore">Part 2: Using .dockerignore</h2>
+<h3 id="step-1-create-dockerignore-file">Step 1: Create .dockerignore File</h3>
+<p><strong><code>.dockerignore</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.4.png" /></p>
+<h3 id="step-2-why-dockerignore-is-important">Step 2: Why .dockerignore is Important</h3>
+<ul>
+<li>Prevents unnecessary files from being copied</li>
+<li>Reduces image size</li>
+<li>Improves build speed</li>
+<li>Increases security</li>
+</ul>
+<hr />
+<h2 id="part-3-building-docker-images">Part 3: Building Docker Images</h2>
+<h3 id="step-1-basic-build-command">Step 1: Basic Build Command</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.5.png" /><br />
+<img alt="" src="" /></p>
+<h3 id="step-2-tagging-images">Step 2: Tagging Images</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.6.png" /></p>
+<h3 id="step-3-view-image-details">Step 3: View Image Details</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.7.png" /></p>
+<hr />
+<h2 id="part-4-running-containers">Part 4: Running Containers</h2>
+<h3 id="step-1-run-container">Step 1: Run Container</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.8.png" /></p>
+<h3 id="step-2-manage-containers">Step 2: Manage Containers</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.9.png" /></p>
+<hr />
+<h2 id="part-5-multi-stage-builds">Part 5: Multi-stage Builds</h2>
+<h3 id="step-1-why-multi-stage-builds">Step 1: Why Multi-stage Builds?</h3>
+<ul>
+<li>Smaller final image size</li>
+<li>Better security (remove build tools)</li>
+<li>Separate build and runtime environments</li>
+</ul>
+<h3 id="step-2-simple-multi-stage-dockerfile">Step 2: Simple Multi-stage Dockerfile</h3>
+<p><strong><code>Dockerfile.multistage</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/Dockerfile_Multistage.png" /></p>
+<h3 id="step-3-build-and-compare">Step 3: Build and Compare</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.10.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.11.png" /></p>
+<hr />
+<h2 id="part-6-publishing-to-docker-hub">Part 6: Publishing to Docker Hub</h2>
+<h3 id="step-1-prepare-for-publishing">Step 1: Prepare for Publishing</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.12.png" /><br />
+<img alt="" src="" /></p>
+<h3 id="step-2-pull-and-run-from-docker-hub">Step 2: Pull and Run from Docker Hub</h3>
+<pre><code class="language-bash"># Pull from Docker Hub (on another machine)
+docker pull username/my-flask-app:latest
+
+# Run the pulled image
+docker run -d -p 5000:5000 username/my-flask-app:latest
+</code></pre>
+<hr />
+<h2 id="part-7-nodejs-example-quick-version">Part 7: Node.js Example (Quick Version)</h2>
+<h3 id="step-1-nodejs-application">Step 1: Node.js Application</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.13.png" /></p>
+<p><strong><code>app.js</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/app.png" /></p>
+<p><strong><code>package.json</code></strong>  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/package.png" /></p>
+<h3 id="step-2-nodejs-dockerfile">Step 2: Node.js Dockerfile</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/Dockerfile.png" /></p>
+<h3 id="step-3-build-and-run">Step 3: Build and Run</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.13.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/4.14.png" /></p>
+<hr />
+<h2 id="part-8-quick-practice-exercises">Part 8: Quick Practice Exercises</h2>
+<p><strong>Exercise 1: Tagging Practice</strong></p>
+<pre><code class="language-bash"># Create an image with three tags:
+# 1. myapp:latest
+# 2. myapp:v2.0
+# 3. yourusername/myapp:production
+
+# Solution:
+docker build -t myapp:latest -t myapp:v2.0 -t username/myapp:production .
+</code></pre>
+<p><strong>Exercise 2: Multi-stage for Node.js</strong></p>
+<pre><code class="language-dockerfile"># Create a multi-stage Dockerfile for Node.js that:
+# 1. Uses builder stage for npm install
+# 2. Creates final image with only production dependencies
+# 3. Uses non-root user
+
+# Hint:
+# STAGE 1: FROM node:18-alpine AS builder
+# STAGE 2: FROM node:18-alpine
+# COPY --from=builder /app/node_modules ./node_modules
+</code></pre>
+<p><strong>Exercise 3: Clean Build</strong></p>
+<pre><code class="language-bash"># Build without cache and with .dockerignore
+docker build --no-cache -t clean-app .
+
+# Compare with cached build
+time docker build -t cached-app .
+</code></pre>
+<hr />
+<h2 id="essential-docker-commands-cheatsheet">Essential Docker Commands Cheatsheet</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>docker build</code></td>
+<td style="text-align: left;">Build image</td>
+<td style="text-align: left;"><code>docker build -t myapp .</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker run</code></td>
+<td style="text-align: left;">Run container</td>
+<td style="text-align: left;"><code>docker run -p 3000:3000 myapp</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker ps</code></td>
+<td style="text-align: left;">List containers</td>
+<td style="text-align: left;"><code>docker ps -a</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker images</code></td>
+<td style="text-align: left;">List images</td>
+<td style="text-align: left;"><code>docker images</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker tag</code></td>
+<td style="text-align: left;">Tag image</td>
+<td style="text-align: left;"><code>docker tag myapp:latest myapp:v1</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker login</code></td>
+<td style="text-align: left;">Login to Dockerhub</td>
+<td style="text-align: left;"><code>echo "token" | docker login -u username --password-stdin</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker push</code></td>
+<td style="text-align: left;">Push to registry</td>
+<td style="text-align: left;"><code>docker push username/myapp</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker pull</code></td>
+<td style="text-align: left;">Pull from registry</td>
+<td style="text-align: left;"><code>docker pull username/myapp</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker rm</code></td>
+<td style="text-align: left;">Remove container</td>
+<td style="text-align: left;"><code>docker rm container-name</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker rmi</code></td>
+<td style="text-align: left;">Remove image</td>
+<td style="text-align: left;"><code>docker rmi image-name</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker logs</code></td>
+<td style="text-align: left;">View logs</td>
+<td style="text-align: left;"><code>docker logs container-name</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker exec</code></td>
+<td style="text-align: left;">Execute command</td>
+<td style="text-align: left;"><code>docker exec -it container-name bash</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="common-workflow-summary">Common Workflow Summary</h2>
+<p><strong>Development Workflow:</strong></p>
+<pre><code class="language-bash"># 1. Create Dockerfile and .dockerignore
+# 2. Build image
+docker build -t myapp .
+
+# 3. Test locally
+docker run -p 8080:8080 myapp
+
+# 4. Tag for production
+docker tag myapp:latest myapp:v1.0
+
+# 5. Push to registry
+docker push myapp:v1.0
+</code></pre>
+<p><strong>Production Workflow:</strong></p>
+<pre><code class="language-bash"># 1. Pull from registry
+docker pull myapp:v1.0
+
+# 2. Run in production
+docker run -d -p 80:8080 --name prod-app myapp:v1.0
+
+# 3. Monitor
+docker logs -f prod-app
+</code></pre>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<ol>
+<li><strong>Dockerfile</strong> defines how to build your image.</li>
+<li><strong>.dockerignore</strong> excludes unnecessary files (important for security and performance).</li>
+<li><strong>Tagging</strong> helps version and organize images.</li>
+<li><strong>Multi-stage builds</strong> create smaller, more secure production images.</li>
+<li><strong>Docker Hub</strong> allows sharing and distributing images.</li>
+<li>Always test images locally before publishing.</li>
+</ol>
+<h2 id="cleanup">Cleanup</h2>
+<pre><code class="language-bash"># Remove all stopped containers
+docker container prune
+
+# Remove unused images
+docker image prune
+
+# Remove everything unused
+docker system prune -a
+</code></pre>
+</body>
+</html>

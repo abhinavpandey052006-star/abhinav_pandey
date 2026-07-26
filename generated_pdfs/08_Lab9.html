@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab9.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="experiment-9-ansible-lab-report">Experiment 9: Ansible Lab Report</h1>
+<h2 id="1-objective">1. Objective</h2>
+<p>To understand and implement infrastructure configuration management using Ansible. The experiment demonstrates how to provision, configure, and manage multiple remote servers (simulated using Docker containers) simultaneously from a single control node without installing any agent software on the managed nodes.</p>
+<h2 id="2-theory">2. Theory</h2>
+<p>Ansible is an open-source automation tool used for configuration management, application deployment, and orchestration. <br />
+* <strong>Agentless Architecture:</strong> It does not require any background agents on the target machines, relying entirely on standard SSH for Linux environments.<br />
+* <strong>Idempotency:</strong> Playbooks can be run multiple times safely; Ansible only makes changes if the system does not match the desired state.<br />
+* <strong>Playbooks:</strong> Uses human-readable YAML syntax to define tasks, ensuring Infrastructure as Code (IaC) principles.<br />
+* <strong>Inventory:</strong> A file defining the list of managed nodes (target servers) that Ansible will connect to.</p>
+<h2 id="3-environment-setup">3. Environment Setup</h2>
+<p><strong>Prerequisites:</strong> * Windows Subsystem for Linux (WSL) running Ubuntu (Control Node).<br />
+* Docker Desktop configured to integrate with WSL.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.1.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.2.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.3.png" /></p>
+<h3 id="31-generating-ssh-keys">3.1 Generating SSH Keys</h3>
+<p>To allow Ansible to connect to the target nodes without passwords, an SSH key pair was generated on the control node.  <br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.4.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.5.png" /></p>
+<h3 id="32-building-the-target-docker-image">3.2 Building the Target Docker Image</h3>
+<p>A custom <code>ubuntu-server</code> Docker image was created to simulate the managed nodes. It installs <code>openssh-server</code>, Python (required by Ansible), and imports the generated SSH keys.</p>
+<p><strong>Dockerfile:</strong><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.6.png" />  </p>
+<p><strong>Build Command:</strong><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.7.png" />  </p>
+<p>building a test container.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.8.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.9.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.10%281%29.png" />  </p>
+<p>removing the container.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.11.png" /></p>
+<h2 id="4-implementation-steps">4. Implementation Steps</h2>
+<h3 id="41-provisioning-the-managed-nodes">4.1 Provisioning the Managed Nodes</h3>
+<p>Four Docker containers (<code>server1</code> to <code>server4</code>) were spun up in the background to act as the infrastructure.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.12.png" />  </p>
+<h3 id="42-creating-the-ansible-inventory">4.2 Creating the Ansible Inventory</h3>
+<p>An <code>inventory.ini</code> file was dynamically generated to tell Ansible how to reach the containers using their internal Docker IP addresses and the custom SSH key.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.14.png" /></p>
+<h3 id="43-testing-connectivity-ping-module">4.3 Testing Connectivity (Ping Module)</h3>
+<p>To verify Ansible could communicate with all four nodes, the <code>ping</code> module was used. Strict host key checking was temporarily disabled to bypass the simultaneous SSH fingerprint prompts for the new containers.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.15.png" /></p>
+<h3 id="44-creating-and-executing-the-playbook">4.4 Creating and Executing the Playbook</h3>
+<p>A playbook was created to automate the configuration of all four servers simultaneously: updating apt packages, installing tools (<code>vim</code>, <code>htop</code>, <code>wget</code>), and writing a custom text file.</p>
+<p><strong>playbook1.yml:</strong><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.17.png" />  </p>
+<p><strong>Execution Command:</strong><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.18.png" /></p>
+<h3 id="45-verification-and-cleanup">4.5 Verification and Cleanup</h3>
+<p>Changes were verified across the cluster using Ansible ad-hoc commands to read the newly created text file on all nodes simultaneously.<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.19.png" /></p>
+<p>Once verified, the infrastructure was torn down by stopping and removing the Docker containers:<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/9.13.png" /></p>
+<h2 id="5-conclusion">5. Conclusion</h2>
+<p>This experiment successfully demonstrated the core workflow of Ansible. By using a single control node, we were able to seamlessly provision, connect to, and configure multiple remote systems simultaneously using an automated YAML playbook. This highlights Ansible's value in reducing manual configuration drift and improving scalability in</p>
+</body>
+</html>

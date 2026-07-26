@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab7.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="lab-experiment-7-cicd-using-jenkins-github-and-docker-hub">Lab Experiment 7: CI/CD using Jenkins, GitHub and Docker Hub</h1>
+<h2 id="1-aim">1. Aim</h2>
+<p>To design and implement a complete CI/CD pipeline using Jenkins, integrating source code from GitHub, and building &amp; pushing Docker images to Docker Hub.</p>
+<h2 id="2-objectives">2. Objectives</h2>
+<ul>
+<li>Understand CI/CD workflow using Jenkins (GUI-based tool)</li>
+<li>Create a structured GitHub repository with application + Jenkinsfile</li>
+<li>Build Docker images from source code</li>
+<li>Securely store Docker Hub credentials in Jenkins</li>
+<li>Automate build &amp; push process using webhook triggers</li>
+<li>Use same host (Docker) as Jenkins agent</li>
+</ul>
+<h2 id="3-theory">3. Theory</h2>
+<p>What is Jenkins?<br />
+Jenkins is a web-based GUI automation server used to:<br />
+* Build applications<br />
+* Test code<br />
+* Deploy software</p>
+<p>It provides:<br />
+* Dashboard (browser-based UI)<br />
+* Plugin ecosystem (GitHub, Docker, etc.)<br />
+* Pipeline as Code using Jenkinsfile</p>
+<p>What is CI/CD?<br />
+* Continuous Integration (CI): Code is automatically built and tested after each commit<br />
+* Continuous Deployment (CD): Built artifacts (Docker images) are automatically delivered/deployed</p>
+<p>Workflow Overview<br />
+Developer -&gt; GitHub -&gt; Webhook -&gt; Jenkins Build -&gt; Docker Hub</p>
+<h2 id="4-prerequisites">4. Prerequisites</h2>
+<ul>
+<li>Docker &amp; Docker Compose installed</li>
+<li>GitHub account</li>
+<li>Docker Hub account</li>
+<li>Basic Linux command knowledge</li>
+</ul>
+<h2 id="5-part-a-github-repository-setup-source-code-build-definition">5. Part A: GitHub Repository Setup (Source Code + Build Definition)</h2>
+<h3 id="51-create-repository">5.1 Create Repository</h3>
+<p>Create a repository on GitHub: my-app</p>
+<h3 id="52-application-code">5.2 Application Code</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.1.png" /></p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.2.png" /></p>
+<h3 id="53-dockerfile-build-process">5.3 Dockerfile (Build Process)</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.3.png" /></p>
+<p>Build Process Explanation<br />
+1. Source code pushed to GitHub<br />
+2. Jenkins pulls code<br />
+3. Dockerfile:<br />
+   * Creates environment<br />
+   * Installs dependencies<br />
+   * Packages app<br />
+4. Output Docker Image</p>
+<h3 id="54-jenkinsfile-pipeline-definition-in-github">5.4 Jenkinsfile (Pipeline Definition in GitHub)</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.4.png" /></p>
+<h2 id="6-part-b-jenkins-setup-using-docker-persistent-configuration">6. Part B: Jenkins Setup using Docker (Persistent Configuration)</h2>
+<h3 id="61-create-docker-compose-file">6.1 Create Docker Compose File</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.5.png" /></p>
+<h3 id="62-start-jenkins">6.2 Start Jenkins</h3>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.6.png" /><br />
+Access: http://localhost:8080</p>
+<h3 id="63-unlock-jenkins">6.3 Unlock Jenkins</h3>
+<p>docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.7.png" /></p>
+<h3 id="64-initial-setup">6.4 Initial Setup</h3>
+<ul>
+<li>Install suggested plugins</li>
+<li>Create admin user</li>
+</ul>
+<h2 id="7-part-c-jenkins-configuration">7. Part C: Jenkins Configuration</h2>
+<h3 id="71-add-docker-hub-credentials">7.1 Add Docker Hub Credentials</h3>
+<p>Path: Manage Jenkins -&gt; Credentials -&gt; Add Credentials<br />
+* Type: Secret Text<br />
+* ID: dockerhub-token<br />
+* Value: Docker Hub Access Token<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.8.png" />  </p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.9.png" /></p>
+<h3 id="72-create-pipeline-job">7.2 Create Pipeline Job</h3>
+<ol>
+<li>New Item -&gt; Pipeline</li>
+<li>Name: ci-cd-pipeline</li>
+<li>Configure:<br />
+   * Pipeline script from SCM<br />
+   * SCM: Git<br />
+   * Repo URL: your GitHub repo<br />
+   * Script Path: Jenkinsfile<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.10.png" /></li>
+</ol>
+<h2 id="8-part-d-github-webhook-integration">8. Part D: GitHub Webhook Integration</h2>
+<h3 id="81-configure-webhook">8.1 Configure Webhook</h3>
+<p>In GitHub: Settings -&gt; Webhooks -&gt; Add Webhook<br />
+* Payload URL: http://<your-server-ip>:8080/github-webhook/<br />
+* Events: Push events<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.11.png" /></p>
+<h2 id="demo">DEMO</h2>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.14.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.12.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/7.13.png" />  </p>
+<h2 id="9-part-e-execution-flow-stage-wise-explanation">9. Part E: Execution Flow (Stage-wise Explanation)</h2>
+<ul>
+<li>Stage 1: Code Push - Developer updates code in GitHub</li>
+<li>Stage 2: Webhook Trigger - GitHub sends event to Jenkins</li>
+<li>Stage 3: Jenkins Pipeline Execution</li>
+<li>Stage: Clone - Pulls latest code from GitHub</li>
+<li>Stage: Build - Docker builds image using Dockerfile</li>
+<li>Stage: Auth - Jenkins logs into Docker Hub using stored token</li>
+<li>Stage: Push - Image pushed to Docker Hub</li>
+<li>Stage 4: Artifact Ready - Docker image available globally</li>
+</ul>
+<h2 id="10-role-of-same-host-agent">10. Role of Same Host Agent</h2>
+<ul>
+<li>Jenkins runs inside Docker</li>
+<li>Docker socket mounted: /var/run/docker.sock</li>
+<li>Effect: Jenkins directly controls host Docker. Builds and pushes images without separate agent.</li>
+</ul>
+<h2 id="11-observations">11. Observations</h2>
+<ul>
+<li>Jenkins GUI simplifies CI/CD management</li>
+<li>GitHub acts as source + pipeline definition</li>
+<li>Docker ensures consistent builds</li>
+<li>Webhook enables automation</li>
+</ul>
+<h2 id="12-result">12. Result</h2>
+<p>Successfully implemented a complete CI/CD pipeline where:<br />
+* Source code and pipeline are maintained in GitHub<br />
+* Jenkins automatically detects changes<br />
+* Docker image is built on host agent<br />
+* Image is securely pushed to Docker Hub</p>
+<h2 id="13-viva-questions">13. Viva Questions</h2>
+<ol>
+<li>What is the role of Jenkinsfile?</li>
+<li>How does Jenkins integrate with GitHub?</li>
+<li>Why is Docker used in CI/CD?</li>
+<li>What is a webhook?</li>
+<li>Why store Docker Hub token in Jenkins credentials?</li>
+<li>What is the benefit of using same host as agent?</li>
+</ol>
+<h2 id="14-key-notes">14. Key Notes</h2>
+<ul>
+<li>Jenkins is GUI-based but pipeline is code-driven</li>
+<li>Always use credentials store (never hardcode secrets)</li>
+<li>Webhook makes CI/CD fully automatic</li>
+<li>This setup is ideal for learning and small deployments</li>
+</ul>
+<h3 id="understanding-jenkins-pipeline-syntax-simplified-explanation">Understanding Jenkins Pipeline Syntax (Simplified Explanation)</h3>
+<p>Jenkins pipelines (written in a Jenkinsfile) follow a clear structure of blocks and steps.</p>
+<ol>
+<li>
+<p>Basic Pipeline Structure</p>
+<p>pipeline {<br />
+    agent any<br />
+    stages {<br />
+        stage('Build') {<br />
+            steps {<br />
+                sh 'echo Hello'<br />
+            }<br />
+        }<br />
+    }<br />
+}</p>
+</li>
+<li>
+<p>Key Terms Explained<br />
+* pipeline {} - Root block. Everything is written inside this.<br />
+* agent any - Defines where the pipeline runs (any available node).<br />
+* stages {} - Groups all phases of pipeline. Logical separation (Clone, Build, Test, Deploy).<br />
+* stage('Name') - A single step/phase in pipeline. Visible in Jenkins GUI as blocks.<br />
+* steps {} - Contains actual commands to execute.</p>
+</li>
+</ol>
+<p>Common Steps<br />
+* git '<a href="https://github.com/user/repo.git">https://github.com/user/repo.git</a>' - Clones source code from GitHub<br />
+* sh 'echo Hello' - Runs Linux commands inside agent. Equivalent to terminal command.<br />
+* echo "Build started" - Prints message in Jenkins console log.</p>
+<ol start="3">
+<li>The Challenging Part: withCredentials<br />
+You need to login to Docker Hub, but you should NOT write password directly in code. Jenkins stores it securely.</li>
+</ol>
+<p>Step-by-Step Meaning:<br />
+1. Store Secret in Jenkins with ID: dockerhub-token<br />
+2. withCredentials Block temporarily injects secret into environment variable.<br />
+   string(credentialsId: 'dockerhub-token', variable: 'DOCKER_TOKEN')<br />
+   * string = Type of secret (text token)<br />
+   * credentialsId = Name used in Jenkins<br />
+   * variable = Temporary variable name<br />
+3. What Happens Internally: Jenkins does DOCKER_TOKEN=your_actual_secret_value<br />
+4. Using It in sh: sh 'echo $DOCKER_TOKEN | docker login -u username --password-stdin'</p>
+<p>Simplified Analogy:<br />
+* Locker (Jenkins Credentials) -&gt; You ask by ID (dockerhub-token) -&gt; Jenkins gives temporary key (DOCKER_TOKEN) -&gt; You use it then it disappears.</p>
+<ol start="4">
+<li>Key Takeaways<br />
+* pipeline -&gt; stages -&gt; stage -&gt; steps = structure<br />
+* sh = run commands<br />
+* git = fetch code<br />
+* withCredentials = securely use secrets<br />
+* Secrets are temporary and protected</li>
+</ol>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab3.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="lab-report-deploying-nginx-using-different-base-images-and-comparing-image-layers">Lab Report: Deploying NGINX Using Different Base Images and Comparing Image Layers</h1>
+<p><strong>Lab Objectives:</strong><br />
+* Deploy NGINX using Official, Ubuntu-based, and Alpine-based images.<br />
+* Understand Docker image layers and size differences.<br />
+* Compare performance, security, and use-cases of each approach.</p>
+<hr />
+<h2 id="part-1-deploy-nginx-using-official-image-recommended-approach">Part 1: Deploy NGINX Using Official Image (Recommended Approach)</h2>
+<p>The official NGINX image is pre-optimized, uses a Debian-based OS internally, and requires minimal configuration.</p>
+<h3 id="step-1-pull-the-image">Step 1: Pull the Image</h3>
+<p>We retrieved the latest official NGINX image from the Docker registry.</p>
+<p><img alt="Pulling Official NGINX Image" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.1.png" /><br />
+<em>Command:</em> <code>docker pull nginx:latest</code></p>
+<h3 id="step-2-run-the-container">Step 2: Run the Container</h3>
+<p>We ran the container in detached mode (<code>-d</code>) naming it <code>nginx-official</code> and mapped port 8080 on the host to port 80 in the container.</p>
+<p><img alt="Running Official NGINX Container" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.2.png" /><br />
+<em>Command:</em> <code>docker run -d --name nginx-official -p 8080:80 nginx</code></p>
+<h3 id="step-3-verify">Step 3: Verify</h3>
+<p>We verified the deployment by accessing the localhost URL. The response confirms the NGINX welcome page is active.</p>
+<p><img alt="Verifying NGINX Response" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.3.png" /><br />
+<em>Command:</em> <code>curl http://localhost:8080</code></p>
+<h3 id="key-observations">Key Observations</h3>
+<p>We checked the size of the downloaded official image.</p>
+<p><img alt="Official NGINX Image Size" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.4.png" /><br />
+<em>Observation:</em> The official image size is approximately 161MB.</p>
+<hr />
+<h2 id="part-2-custom-nginx-using-ubuntu-base-image">Part 2: Custom NGINX Using Ubuntu Base Image</h2>
+<p>In this section, we built a custom image using <code>ubuntu:22.04</code> as the base. This approach results in a larger image but provides full OS utilities, which is useful for debugging.</p>
+<h3 id="step-1-build-the-image">Step 1: Build the Image</h3>
+<p>We created a <code>Dockerfile</code> that installs NGINX on top of Ubuntu and built the image with the tag <code>nginx-ubuntu</code>.</p>
+<p><img alt="Building Ubuntu-based NGINX Image" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.5.png" /><br />
+<em>Command:</em> <code>docker build -t nginx-ubuntu .</code></p>
+<h3 id="step-2-run-the-container_1">Step 2: Run the Container</h3>
+<p>We ran the Ubuntu-based container on port 8081.</p>
+<p><img alt="Running Ubuntu Container" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.6.png" /><br />
+<em>Command:</em> <code>docker run -d --name nginx-ubuntu -p 8081:80 nginx-ubuntu</code></p>
+<h3 id="observations">Observations</h3>
+<p>The resulting image is significantly larger due to the inclusion of full OS utilities.</p>
+<p><img alt="Ubuntu-based NGINX Image Size" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.7.png" /><br />
+<em>Observation:</em> The image size is approximately 134MB.</p>
+<hr />
+<h2 id="part-3-custom-nginx-using-alpine-base-image">Part 3: Custom NGINX Using Alpine Base Image</h2>
+<p>We built a custom image using <code>alpine:latest</code>. Alpine Linux is a security-oriented, lightweight Linux distribution.</p>
+<h3 id="step-1-build-image">Step 1: Build Image</h3>
+<p>We built the image tagged <code>nginx-alpine</code>.</p>
+<p><img alt="Building Alpine-based NGINX Image" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.8.png" /><br />
+<em>Command:</em> <code>docker build -t nginx-alpine .</code></p>
+<h3 id="step-2-run-the-container_2">Step 2: Run the Container</h3>
+<p>We ran the Alpine-based container mapping port 8082 to port 80.</p>
+<p><img alt="Running Alpine NGINX Container" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.9.png" /><br />
+<em>Command:</em> <code>docker run -d --name nginx-alpine -p 8082:80 nginx-alpine</code></p>
+<h3 id="observations_1">Observations</h3>
+<p>The Alpine-based image is extremely small compared to the others.</p>
+<p><img alt="Alpine-based NGINX Image Size" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.10.png" /><br />
+<em>Observation:</em> The image size is approximately 10.4MB.</p>
+<hr />
+<h2 id="part-4-image-size-and-layer-comparison">Part 4: Image Size and Layer Comparison</h2>
+<h3 id="compare-sizes">Compare Sizes</h3>
+<p>We compared all three images side-by-side to visualize the size differences.</p>
+<p><img alt="Image Size Comparison" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.11.png" /></p>
+<h3 id="inspect-layers">Inspect Layers</h3>
+<p>We inspected the layer history of all three images.<br />
+* <strong>Ubuntu</strong> has many filesystem layers due to the full OS utilities.<br />
+* <strong>Alpine</strong> has minimal layers, contributing to its small size.<br />
+* <strong>Official NGINX</strong> is optimized but heavier than Alpine.</p>
+<p><img alt="Docker History Comparison" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.12.png" /><br />
+<em>Command:</em> <code>docker history nginx</code>, <code>docker history nginx-ubuntu</code>, <code>docker history nginx-alpine</code>.</p>
+<hr />
+<h2 id="part-5-functional-tasks-serving-custom-content">Part 5: Functional Tasks (Serving Custom Content)</h2>
+<h3 id="step-1-create-custom-html">Step 1: Create Custom HTML</h3>
+<p>We created a directory named <code>html</code> and added a custom <code>index.html</code> file.</p>
+<p><img alt="Creating Custom HTML" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.13.png" /><br />
+<em>Commands:</em><br />
+* <code>mkdir html</code><br />
+* <code>echo "&lt;h1&gt;Hello from Docker NGINX&lt;/h1&gt;" &gt; html/index.html</code></p>
+<h3 id="step-2-run-with-volume-mount">Step 2: Run with Volume Mount</h3>
+<p>We ran a new container, mounting the local <code>html</code> directory to <code>/usr/share/nginx/html</code> inside the container. This allows NGINX to serve our custom file.</p>
+<p><img alt="Running NGINX with Volume Mount" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/3.14.png" /><br />
+<em>Command:</em> <code>docker run -d -p 8083:80 -v $(pwd)/html:/usr/share/nginx/html nginx</code></p>
+<hr />
+<h2 id="part-6-comparison-summary">Part 6: Comparison Summary</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Official NGINX</th>
+<th style="text-align: left;">Ubuntu NGINX</th>
+<th style="text-align: left;">Alpine NGINX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Image Size</strong></td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">Very Small</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ease of Use</strong></td>
+<td style="text-align: left;">Very Easy</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Medium</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Startup Time</strong></td>
+<td style="text-align: left;">Fast</td>
+<td style="text-align: left;">Slow</td>
+<td style="text-align: left;">Very Fast</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Debugging Tools</strong></td>
+<td style="text-align: left;">Limited</td>
+<td style="text-align: left;">Excellent</td>
+<td style="text-align: left;">Minimal</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Security Surface</strong></td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Large</td>
+<td style="text-align: left;">Small</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Production Ready</strong></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Rarely</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-7-when-to-use-what">Part 7: When to Use What</h2>
+<ul>
+<li><strong>Official NGINX Image:</strong> Recommended for production deployment, standard web hosting, and reverse proxy/load balancer use cases.</li>
+<li><strong>Ubuntu-Based Image:</strong> Best for learning Linux/NGINX internals or when heavy debugging and custom system-level dependencies are required.</li>
+<li><strong>Alpine-Based Image:</strong> Ideal for microservices, CI/CD pipelines, and cloud/Kubernetes workloads due to its small footprint.</li>
+</ul>
+</body>
+</html>

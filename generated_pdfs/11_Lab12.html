@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab12.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="experiment-12-study-and-analyse-container-orchestration-using-kubernetes">Experiment 12 — Study and Analyse Container Orchestration using Kubernetes</h1>
+<h2 id="objective">Objective</h2>
+<h2 id="to-understand-why-kubernetes-is-used-for-container-orchestration-and-learn-how-to-deploy-scale-and-manage-applications-using-kubernetes-commands">To understand why Kubernetes is used for container orchestration and learn how to deploy, scale, and manage applications using Kubernetes commands.</h2>
+<h1 id="theory">Theory</h1>
+<h2 id="why-kubernetes-over-docker-swarm">Why Kubernetes over Docker Swarm?</h2>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Industry Standard</td>
+<td>Most companies use Kubernetes</td>
+</tr>
+<tr>
+<td>Powerful Scheduling</td>
+<td>Automatically decides where to run applications</td>
+</tr>
+<tr>
+<td>Large Ecosystem</td>
+<td>Many tools and plugins available</td>
+</tr>
+<tr>
+<td>Cloud Native Support</td>
+<td>Works on AWS, Google Cloud, Azure, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>Kubernetes has become the <strong>dominant orchestration platform for modern cloud applications</strong>. </p>
+<hr />
+<h1 id="core-kubernetes-concepts">Core Kubernetes Concepts</h1>
+<table>
+<thead>
+<tr>
+<th>Docker Concept</th>
+<th>Kubernetes Equivalent</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container</td>
+<td>Pod</td>
+<td>Smallest deployable unit containing one or more containers</td>
+</tr>
+<tr>
+<td>Compose Service</td>
+<td>Deployment</td>
+<td>Describes how applications run and how many replicas</td>
+</tr>
+<tr>
+<td>Load Balancer</td>
+<td>Service</td>
+<td>Exposes application to external traffic</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>ReplicaSet</td>
+<td>Ensures a desired number of pods run</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>Pod</strong> is the smallest execution unit in Kubernetes.<br />
+A <strong>Deployment</strong> manages pod creation and scaling.<br />
+A <strong>Service</strong> exposes pods to users or other services.</p>
+<hr />
+<h1 id="hands-on-lab">Hands-On Lab</h1>
+<p>This lab assumes:</p>
+<ul>
+<li><code>kubectl</code> installed</li>
+<li>Kubernetes cluster running (Minikube or k3d)</li>
+</ul>
+<hr />
+<h1 id="task-1-create-a-deployment">Task 1 — Create a Deployment</h1>
+<p>A Deployment specifies:</p>
+<ul>
+<li>container image</li>
+<li>number of replicas</li>
+<li>labels used to identify pods</li>
+</ul>
+<p>Create file:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.1.png" /></p>
+<p>Apply deployment:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.2.png" /></p>
+<p>Kubernetes will create <strong>two pods running WordPress</strong>. </p>
+<hr />
+<h1 id="task-2-expose-the-deployment">Task 2 — Expose the Deployment</h1>
+<p>Pods are temporary and may change.<br />
+A <strong>Service</strong> provides a stable network endpoint.</p>
+<p>Create file:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.3.png" /></p>
+<p>Apply service:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.4.png" /></p>
+<p>The application is now accessible via a node port. </p>
+<hr />
+<h1 id="task-3-verify-deployment">Task 3 — Verify Deployment</h1>
+<p>Check pods:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.5.png" /></p>
+<p>Expected output:</p>
+<pre><code>NAME READY STATUS RESTARTS AGE
+wordpress-xxxxx-yyyyy 1/1 Running 0 1m
+wordpress-xxxxx-zzzzz 1/1 Running 0 1m
+</code></pre>
+<p>Check service:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.6.png" /><br />
+Example output:</p>
+<pre><code>NAME TYPE CLUSTER-IP PORT(S)
+wordpress-service NodePort 10.43.x.x 80:30007/TCP
+</code></pre>
+<p>Access application:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.7.png" /></p>
+<p>Node IP can be obtained using:</p>
+<pre><code>minikube ip
+</code></pre>
+<p>or using <code>localhost</code> for k3d clusters.</p>
+<hr />
+<h1 id="task-4-scale-the-deployment">Task 4 — Scale the Deployment</h1>
+<p>Increase replicas from <strong>2 to 4</strong>:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.8.png" /></p>
+<p>Verify:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.10.png" /></p>
+<p>Four pods should now be running.</p>
+<p>Scaling allows the application to handle <strong>higher traffic and improved performance</strong>. </p>
+<hr />
+<h1 id="task-5-self-healing-demonstration">Task 5 — Self-Healing Demonstration</h1>
+<p>Kubernetes automatically replaces failed pods.</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/12.9.png" /></p>
+<p>A new pod will automatically be created to maintain the desired number of replicas.</p>
+<p>This demonstrates <strong>Kubernetes self-healing capability</strong>. </p>
+<hr />
+<h1 id="docker-swarm-vs-kubernetes">Docker Swarm vs Kubernetes</h1>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Docker Swarm</th>
+<th>Kubernetes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>Easy</td>
+<td>More complex</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Basic</td>
+<td>Advanced</td>
+</tr>
+<tr>
+<td>Ecosystem</td>
+<td>Small</td>
+<td>Large</td>
+</tr>
+<tr>
+<td>Industry Use</td>
+<td>Rare</td>
+<td>Standard</td>
+</tr>
+</tbody>
+</table>
+<p>Kubernetes is the <strong>industry standard orchestration platform</strong>. :contentReference[oaicite:9]{index=9}</p>
+<hr />
+</body>
+</html>

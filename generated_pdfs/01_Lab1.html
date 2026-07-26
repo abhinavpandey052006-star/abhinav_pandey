@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab1.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="lab-report-comparison-of-virtual-machines-vms-and-containers">Lab Report: Comparison of Virtual Machines (VMs) and Containers</h1>
+<hr />
+<h2 id="1-objective"><strong>1. Objective</strong></h2>
+<p>The primary goals of this experiment are:<br />
+* To understand the conceptual and practical differences between Virtual Machines (VMs) and Containers.<br />
+* To install and configure an Ubuntu-based Nginx web server using both VirtualBox/Vagrant and Docker inside WSL.<br />
+* To compare resource utilization, performance, and operational characteristics of both environments.</p>
+<hr />
+<h2 id="2-hardware-and-software-requirements"><strong>2. Hardware and Software Requirements</strong></h2>
+<h3 id="hardware"><strong>Hardware</strong></h3>
+<ul>
+<li>64-bit system with virtualization support enabled in BIOS.</li>
+<li>Minimum 8 GB RAM (4 GB acceptable).</li>
+<li>Internet connection.</li>
+</ul>
+<h3 id="software"><strong>Software</strong></h3>
+<ul>
+<li>Oracle VirtualBox and Vagrant.</li>
+<li>Windows Subsystem for Linux (WSL 2) with Ubuntu distribution.</li>
+<li>Docker Engine (docker.io).</li>
+</ul>
+<hr />
+<h2 id="3-theory"><strong>3. Theory</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Virtual Machine (VM)</th>
+<th style="text-align: left;">Container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Virtualization Level</strong></td>
+<td style="text-align: left;">Emulates complete hardware and kernel.</td>
+<td style="text-align: left;">Virtualizes at the OS level, sharing the host kernel.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Isolation</strong></td>
+<td style="text-align: left;">Strong (Full OS isolation).</td>
+<td style="text-align: left;">Moderate (Process-level isolation).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Resource Usage</strong></td>
+<td style="text-align: left;">Higher (Requires dedicated RAM/CPU for guest OS).</td>
+<td style="text-align: left;">Lightweight and efficient.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Startup Time</strong></td>
+<td style="text-align: left;">Slower (Minutes/Seconds).</td>
+<td style="text-align: left;">Fast (Milliseconds/Seconds).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-experiment-setup-part-a-virtual-machine"><strong>4. Experiment Setup - Part A: Virtual Machine</strong></h2>
+<h3 id="step-1-initialization-and-deployment"><strong>Step 1: Initialization and Deployment</strong></h3>
+<p>Using Vagrant, an Ubuntu VM was initialized and started.<br />
+* <strong>Command:</strong> <code>vagrant init ubuntu/jammy64</code> followed by <code>vagrant up</code>.</p>
+<p><img alt="Vagrant Up Process" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/1.jpeg" /></p>
+<blockquote>
+<p><strong>Observation:</strong> The system downloads the base box (Ubuntu Jammy) and configures the VirtualBox provider. Port forwarding (2222 -&gt; 22) is established.</p>
+</blockquote>
+<h3 id="step-2-accessing-the-vm-ssh"><strong>Step 2: Accessing the VM (SSH)</strong></h3>
+<p>Once the VM was up, we established a connection to the guest OS.<br />
+* <strong>Command:</strong> <code>vagrant ssh</code></p>
+<p><img alt="VM SSH Connection" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.jpeg" /><br />
+)</p>
+<blockquote>
+<p><strong>Observation:</strong> Successful login to the Ubuntu 22.04.5 LTS environment.</p>
+</blockquote>
+<h3 id="step-3-installing-nginx"><strong>Step 3: Installing Nginx</strong></h3>
+<p>Inside the VM terminal, the package lists were updated, and the Nginx web server was installed.<br />
+* <strong>Commands:</strong> <code>sudo apt update</code>, <code>sudo apt install -y nginx</code></p>
+<p><img alt="Nginx Installation in VM" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/3.jpeg" /></p>
+<blockquote>
+<p><strong>Observation:</strong> The <code>apt</code> package manager retrieves necessary archives. This process is slower than Docker as it installs dependencies for a full OS environment.</p>
+</blockquote>
+<h3 id="step-4-verification-inside-vm"><strong>Step 4: Verification Inside VM</strong></h3>
+<p>We verified the server was running locally within the guest OS.<br />
+* <strong>Command:</strong> <code>curl localhost</code></p>
+<p><img alt="VM Internal Verification" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/4.jpeg" /></p>
+<blockquote>
+<p><strong>Observation:</strong> The <code>curl</code> command inside the VM returns the full HTML source of the "Welcome to nginx!" page.</p>
+</blockquote>
+<hr />
+<h2 id="5-experiment-setup-part-b-containers-docker"><strong>5. Experiment Setup - Part B: Containers (Docker)</strong></h2>
+<h3 id="step-1-running-the-container"><strong>Step 1: Running the Container</strong></h3>
+<p>The Docker engine was used to pull the Ubuntu image and deploy a containerized Nginx instance.<br />
+* <strong>Command:</strong> <code>docker run -dp 8080:80 --name nginx-container nginx</code></p>
+<p><img alt="Docker Pull and Run" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/5.jpeg" /></p>
+<blockquote>
+<p><strong>Observation:</strong> Docker pulls the image layers and starts the container nearly instantaneously.</p>
+</blockquote>
+<h3 id="step-2-verification"><strong>Step 2: Verification</strong></h3>
+<p>The Nginx server was verified by accessing the mapped port on the localhost.<br />
+* <strong>Command:</strong> <code>curl localhost:8080</code></p>
+<p><img alt="Nginx Container Verification" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/6.jpeg" /></p>
+<blockquote>
+<p><strong>Observation:</strong> The <code>curl</code> command confirms the Nginx "Welcome" page is active on port 8080.</p>
+</blockquote>
+<hr />
+<h2 id="6-resource-utilization-comparison"><strong>6. Resource Utilization &amp; Comparison</strong></h2>
+<p>This section uses specific metrics captured during the experiment to contrast the two technologies.</p>
+<h3 id="a-boot-time-analysis"><strong>A. Boot Time Analysis</strong></h3>
+<ul>
+<li><strong>Metric:</strong> Time taken to reach a usable state.</li>
+<li><strong>VM Command:</strong> <code>systemd-analyze</code></li>
+</ul>
+<p><img alt="VM Boot Time Analysis" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/7.png" /></p>
+<blockquote>
+<p><strong>Observation (VM):</strong> The VM took <strong>36.819 seconds</strong> to finish startup (6.9s kernel + 29.8s userspace).<br />
+<strong>Observation (Container):</strong> The container started in <strong>less than 1 second</strong> (refer to Docker output in Sec 5).</p>
+</blockquote>
+<h3 id="b-process-overhead-isolation"><strong>B. Process Overhead &amp; Isolation</strong></h3>
+<ul>
+<li><strong>Metric:</strong> Number of background processes required to run the application.</li>
+<li><strong>VM Command:</strong> <code>htop</code></li>
+</ul>
+<p><img alt="VM Htop Process List" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/8.png" /></p>
+<blockquote>
+<p><strong>Observation (VM):</strong> <code>htop</code> reveals a heavy process tree. Even though we only want Nginx, the VM is running <code>systemd</code>, <code>snapd</code>, <code>rsyslogd</code>, <code>polkitd</code>, and <code>sshd</code>. There are dozens of tasks running to support the OS.</p>
+</blockquote>
+<p><img alt="Docker Stats" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/9.png" /></p>
+<blockquote>
+<p><strong>Observation (Container):</strong> <code>docker stats</code> shows the container uses minimal resources because it <em>only</em> runs the application process (Nginx) and its direct dependencies.</p>
+</blockquote>
+<h3 id="c-memory-usage"><strong>C. Memory Usage</strong></h3>
+<ul>
+<li><strong>Metric:</strong> RAM consumption.</li>
+</ul>
+<p><img alt="VM Memory Usage" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/10.png" /></p>
+<blockquote>
+<p><strong>Observation (VM):</strong> The <code>free -h</code> command inside the VM shows it has allocated <strong>957Mi</strong> total, with <strong>196Mi</strong> used immediately by the OS kernel and services.</p>
+<p><strong>Observation (Container):</strong> Referring to the Docker Stats image above, the container consumes only <strong>13.22MiB</strong> of RAM.</p>
+</blockquote>
+<h3 id="comparison-summary-table"><strong>Comparison Summary Table</strong></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Virtual Machine (VM)</th>
+<th style="text-align: left;">Container (Docker)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Boot Time</strong></td>
+<td style="text-align: left;"><strong>~36.8 seconds</strong> (Measured)</td>
+<td style="text-align: left;"><strong>&lt; 1 second</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>RAM Usage</strong></td>
+<td style="text-align: left;"><strong>~196 MiB</strong> (Base OS overhead)</td>
+<td style="text-align: left;"><strong>~13.22 MiB</strong> (App only)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Background Processes</strong></td>
+<td style="text-align: left;">High (init, systemd, ssh, logs)</td>
+<td style="text-align: left;">Low (only Nginx entrypoint)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Disk Usage</strong></td>
+<td style="text-align: left;">Larger (Full OS libraries)</td>
+<td style="text-align: left;">Smaller (Layered Image)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-conclusion"><strong>7. Conclusion</strong></h2>
+<p>The experiment validates that <strong>Containers</strong> are significantly more lightweight.<br />
+1.  <strong>Speed:</strong> The Docker container started instantly, whereas the VM required nearly 37 seconds to boot.<br />
+2.  <strong>Efficiency:</strong> The VM required ~200MB of RAM just to exist, while the containerized application ran comfortably on ~13MB.<br />
+3.  <strong>Complexity:</strong> The <code>htop</code> analysis clearly shows that VMs run a full operating system stack, creating unnecessary overhead for single-application deployments.</p>
+<p>Therefore, Containers are ideal for microservices and rapid scaling, while VMs are better suited for scenarios requiring full hardware simulation or complete OS isolation.</p>
+<hr />
+<h2 id="8-viva-voce-answers"><strong>8. Viva Voce Answers</strong></h2>
+<ol>
+<li><strong>Main Difference:</strong> VMs virtualize hardware (slow, heavy); containers virtualize the OS (fast, light).</li>
+<li><strong>Fast Startup:</strong> Containers use the host kernel and don't need to boot a new OS, saving the ~30s kernel/userspace init time seen in the VM.</li>
+<li><strong>Hypervisor Role:</strong> The hypervisor (VirtualBox) manages the VM's access to hardware.</li>
+<li><strong>Different Kernels:</strong> Containers share the host kernel. VMs run their own kernel.</li>
+<li><strong>Why use <code>htop</code>?</strong> To visualize the process tree and see that a VM runs many system services (systemd, journald) that a container does not.</li>
+</ol>
+</body>
+</html>

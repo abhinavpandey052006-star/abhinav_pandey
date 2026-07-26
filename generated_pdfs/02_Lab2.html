@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab2.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="lab-report-experiment-2">Lab Report: Experiment 2</h1>
+<h2 id="docker-installation-configuration-and-running-images">Docker Installation, Configuration, and Running Images</h2>
+<hr />
+<h2 id="1-objective">1. Objective</h2>
+<p>The objective of this lab is to:<br />
+* Pull Docker images<br />
+* Run containers<br />
+* Manage container lifecycle</p>
+<hr />
+<h2 id="2-procedure-and-results">2. Procedure and Results</h2>
+<h3 id="step-1-pull-image">Step 1: Pull Image</h3>
+<p>The first step involves fetching the Nginx image from Docker Hub<br />
+* <strong>Command:</strong> <code>docker pull nginx</code> <br />
+<strong>Execution Screenshot:</strong><br />
+<img alt="Docker Pull Nginx" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.1.png" /></p>
+<hr />
+<h3 id="step-2-run-container-with-port-mapping">Step 2: Run Container with Port Mapping</h3>
+<p>The container is started in detached mode with host port 8080 mapped to container port 80.<br />
+* <strong>Command:</strong> <code>docker run -dp 8080:80 nginx</code></p>
+<p><strong>Execution Screenshot:</strong><br />
+<img alt="Docker Run Nginx" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.2.png" /></p>
+<hr />
+<h3 id="step-3-verify-running-containers">Step 3: Verify Running Containers</h3>
+<p>To confirm the container is active and check the assigned status and ports, the <code>ps</code> command is used[cite: 15].<br />
+* <strong>Command:</strong> <code>docker ps</code></p>
+<p><strong>Execution Screenshot:</strong><br />
+<img alt="Docker PS Output" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.3.png" /></p>
+<hr />
+<h3 id="step-4-stop-and-remove-container">Step 4: Stop and Remove Container</h3>
+<p>To manage the lifecycle, the container is stopped first and then removed using its ID.<br />
+* <strong>Stop Command:</strong> <code>docker stop 5ee0a6fcf8b6</code> <br />
+* <strong>Remove Command:</strong> <code>docker rm 5ee0a6fcf8b6</code> </p>
+<p><strong>Stop/Remove Screenshot:</strong><br />
+<img alt="Docker Remove Container" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.4.png" /></p>
+<hr />
+<h3 id="step-5-remove-image">Step 5: Remove Image</h3>
+<p>The final step in the lifecycle management is removing the image from the local repository.<br />
+* <strong>Command:</strong> <code>docker rmi nginx</code></p>
+<p><strong>Execution Screenshot:</strong><br />
+<img alt="Docker Remove Image" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/Screenshots/2.5.png" /></p>
+<hr />
+<h2 id="3-result-and-conclusion">3. Result and Conclusion</h2>
+<h3 id="result">Result</h3>
+<p>Docker images were successfully pulled, containers executed, and lifecycle commands performed.</p>
+<h3 id="overall-conclusion">Overall Conclusion</h3>
+<p>This lab demonstrated containerization using Docker, highlighting clear performance and resource efficiency. Containers are better suited for rapid deployment and microservices, whereas VMs provide stronger isolation.</p>
+</body>
+</html>

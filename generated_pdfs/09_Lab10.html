@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab10.md</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.6;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        page-break-after: avoid;
+    }
+    h1 {
+        font-size: 20pt;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.4em;
+        color: #2563eb;
+    }
+    h2 {
+        font-size: 15pt;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        color: #1d4ed8;
+    }
+    h3 {
+        font-size: 12.5pt;
+        color: #334155;
+    }
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        font-size: 9pt;
+        background-color: #f1f5f9;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        color: #0f172a;
+    }
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 8.8pt;
+        line-height: 1.5;
+        page-break-inside: avoid;
+    }
+    pre code {
+        font-family: 'JetBrains Mono', Consolas, monospace;
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    blockquote {
+        margin: 0 0 16px 0;
+        padding: 0.5em 1em;
+        color: #475569;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 4px 4px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 16px;
+        page-break-inside: avoid;
+    }
+    table th, table td {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+    }
+    table th {
+        font-weight: 600;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        text-align: left;
+    }
+    table tr:nth-child(2n) {
+        background-color: #f8fafc;
+    }
+    img {
+        max-width: 95%;
+        max-height: 750px;
+        height: auto;
+        display: block;
+        margin: 14px auto;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        page-break-inside: avoid;
+    }
+    hr {
+        height: 1px;
+        padding: 0;
+        margin: 24px 0;
+        background-color: #e2e8f0;
+        border: 0;
+    }
+    ul, ol {
+        padding-left: 1.8em;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    li {
+        margin-bottom: 4px;
+    }
+</style>
+
+</head>
+<body>
+    <h1 id="experiment-10-sonarqube-static-code-analysis-lab">Experiment 10 — SonarQube Static Code Analysis Lab</h1>
+<h2 id="objective">Objective</h2>
+<p>To understand and perform static code analysis using SonarQube by:<br />
+- Running a SonarQube server using Docker<br />
+- Scanning a Java project using Sonar Scanner (via Maven plugin)<br />
+- Viewing detected bugs, vulnerabilities, and code smells in the dashboard</p>
+<hr />
+<h1 id="theory">Theory</h1>
+<h2 id="problem-statement">Problem Statement</h2>
+<p>Code bugs and security vulnerabilities are often discovered too late in the development cycle. Manual reviews are slow and hard to scale.</p>
+<p>Static code analysis tools like <strong>SonarQube</strong> automatically analyze source code without executing it.</p>
+<hr />
+<h1 id="what-is-sonarqube">What is SonarQube?</h1>
+<p>SonarQube is an open-source platform used for <strong>continuous inspection of code quality</strong>.</p>
+<p>It detects:</p>
+<ul>
+<li>Bugs</li>
+<li>Security vulnerabilities</li>
+<li>Code smells</li>
+<li>Code duplication</li>
+<li>Technical debt</li>
+<li>Test coverage</li>
+</ul>
+<hr />
+<h1 id="sonarqube-architecture">SonarQube Architecture</h1>
+<p>SonarQube has two main components.</p>
+<h2 id="sonarqube-server">SonarQube Server</h2>
+<p>Responsible for:</p>
+<ul>
+<li>storing results</li>
+<li>applying analysis rules</li>
+<li>enforcing quality gates</li>
+<li>providing a dashboard</li>
+</ul>
+<p>Runs at:</p>
+<pre><code>http://localhost:9000
+</code></pre>
+<hr />
+<h2 id="sonar-scanner">Sonar Scanner</h2>
+<p>Scanner:</p>
+<ul>
+<li>reads source code</li>
+<li>gathers project metadata</li>
+<li>sends results to the server</li>
+</ul>
+<p>The <strong>server performs the real analysis</strong>, not the scanner.</p>
+<hr />
+<h1 id="architecture-flow">Architecture Flow</h1>
+<pre><code>Source Code
+     │
+     ▼
+Sonar Scanner
+     │
+     ▼
+SonarQube Server
+     │
+     ▼
+PostgreSQL Database
+     │
+     ▼
+Web Dashboard
+</code></pre>
+<hr />
+<h1 id="step-1-start-sonarqube-server">Step 1 — Start SonarQube Server</h1>
+<p>Create <code>docker-compose.yml</code></p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.1.png" /></p>
+<p>Start containers:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.2.png" /></p>
+<p>Check logs:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.3.png" /></p>
+<p>Open dashboard:</p>
+<pre><code>http://localhost:9000
+</code></pre>
+<p>Login:</p>
+<pre><code>admin / admin
+</code></pre>
+<hr />
+<h1 id="step-2-create-sample-java-app">Step 2 — Create Sample Java App</h1>
+<p>Create project structure:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.4.png" /></p>
+<p>Create <code>Calculator.java</code></p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.5.png" /></p>
+<hr />
+<h1 id="step-3-create-maven-config">Step 3 — Create Maven Config</h1>
+<p>Create <code>pom.xml</code></p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.6.png" /></p>
+<hr />
+<h1 id="step-4-generate-token">Step 4 — Generate Token</h1>
+<p>Open dashboard → profile → <strong>My Account → Security</strong></p>
+<p>Generate token:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.7.png" /></p>
+<hr />
+<h1 id="step-5-run-scan">Step 5 — Run Scan</h1>
+<pre><code>cd sample-java-app
+</code></pre>
+<p>Run scanner:</p>
+<p><img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.8.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.9.png" /></p>
+<p>Process:</p>
+<ol>
+<li>Maven compiles project</li>
+<li>Scanner collects code</li>
+<li>Sends analysis to server</li>
+<li>Server evaluates rules</li>
+<li>Results stored in PostgreSQL</li>
+</ol>
+<hr />
+<h1 id="step-6-view-results">Step 6 — View Results</h1>
+<p>Open:<br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.10.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.11.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.12.png" /><br />
+<img alt="" src="file:///C:/Users/DELL/.gemini/antigravity/scratch/devops_lab_abhinav/DevOps_Lab/Screenshots/10.13.png" /></p>
+<p>You will see:</p>
+<ul>
+<li>Bugs</li>
+<li>Vulnerabilities</li>
+<li>Code Smells</li>
+<li>Duplication</li>
+<li>Technical Debt</li>
+<li>Quality Gate</li>
+</ul>
+<hr />
+<h1 id="results">Results</h1>
+<p>Detected issues include:</p>
+<ul>
+<li>Division by zero bug</li>
+<li>SQL injection vulnerability</li>
+<li>Unused variable</li>
+<li>Duplicate methods</li>
+<li>Null pointer risk</li>
+<li>Empty catch block</li>
+</ul>
+<hr />
+<h1 id="conclusion">Conclusion</h1>
+<p>In this experiment, SonarQube was deployed using Docker with PostgreSQL.<br />
+A Java project was analyzed using the Maven Sonar Scanner plugin, and issues such as bugs, vulnerabilities, and code smells were detected and visualized through the SonarQube dashboard.</p>
+</body>
+</html>
